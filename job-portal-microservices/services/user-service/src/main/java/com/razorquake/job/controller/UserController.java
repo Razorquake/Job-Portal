@@ -20,11 +20,13 @@ public class UserController {
     private final UserService userService;
 
     @PutMapping("/profile")
-    public UserResponse updateProfile(
+    public ResponseEntity<UserResponse> updateProfile(
             @AuthenticationPrincipal UserDetails userDetails,
             @RequestBody UpdateUserRequest updateUserRequest
     ) {
-        return userService.updateProfile(userDetails.getUsername(), updateUserRequest);
+        return ResponseEntity.ok(
+                userService.updateProfile(userDetails.getUsername(), updateUserRequest)
+        );
     }
 
     @GetMapping("/profile")

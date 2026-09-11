@@ -6,6 +6,7 @@ import com.razorquake.job.payload.SignUpRequest;
 import com.razorquake.job.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,17 +20,21 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/signup")
-    public AuthResponse signup(
+    public ResponseEntity<AuthResponse> signup(
             @RequestBody @Valid SignUpRequest signupRequest
     ) {
-        return authService.signup(signupRequest);
+        return ResponseEntity.ok(
+                authService.signup(signupRequest)
+        );
     }
 
     @PostMapping("/login")
-    public AuthResponse login(
+    public ResponseEntity<AuthResponse> login(
             @RequestBody @Valid LoginRequest loginRequest
     ) {
-        return authService.login(loginRequest);
+        return ResponseEntity.ok(
+                authService.login(loginRequest)
+        );
     }
 
 }
