@@ -11,6 +11,7 @@ public class JobSkillMapper {
                 .name(jobSkillRequest.getName())
                 .slug(slug)
                 .category(jobSkillRequest.getCategory())
+                .active(true)
                 .build();
     }
 

@@ -6,6 +6,7 @@ import com.razorquake.job.domain.WorkMode;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.math.BigDecimal;
@@ -29,7 +30,7 @@ public class JobRequest {
     private String responsibilities;
     private String benefits;
 
-    @NotBlank(message = "Category is required")
+    @NotNull(message = "Category is required")
     private Long categoryId;
 
     private Set<Long> skillIds;

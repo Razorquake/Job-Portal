@@ -1,6 +1,6 @@
 package com.razorquake.job.exception;
 
-public class JobCategoryNotFoundException extends RuntimeException {
+public class JobCategoryNotFoundException extends NotFoundException {
     public JobCategoryNotFoundException(String message) {
         super(message);
     }

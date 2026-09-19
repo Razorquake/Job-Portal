@@ -2,6 +2,7 @@ package com.razorquake.job.service;
 
 import com.razorquake.job.dto.JobCategoryRequest;
 import com.razorquake.job.dto.JobCategoryResponse;
+import com.razorquake.job.model.JobCategory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,4 +21,5 @@ public interface JobCategoryService {
     void deleteJobCategory(Long id);
 
 
+    JobCategory findJobCategoryById(Long id);
 }

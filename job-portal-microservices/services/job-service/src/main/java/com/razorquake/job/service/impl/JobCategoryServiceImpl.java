@@ -63,7 +63,7 @@ public class JobCategoryServiceImpl implements JobCategoryService {
 
     @Override
     public JobCategoryResponse getJobCategoryById(Long id) {
-        return JobCategoryMapper.toJobCategoryResponse(findJobCategoryById(id), true);
+        return JobCategoryMapper.toJobCategoryResponse(findJobCategoryById(id), false);
     }
 
     @Override
@@ -99,7 +99,8 @@ public class JobCategoryServiceImpl implements JobCategoryService {
         jobCategoryRepository.save(jobCategory);
     }
 
-    private JobCategory findJobCategoryById(Long id) {
+    @Override
+    public JobCategory findJobCategoryById(Long id) {
         return jobCategoryRepository
                 .findById(id)
                 .orElseThrow(() -> new JobCategoryNotFoundException("Job category not found"));

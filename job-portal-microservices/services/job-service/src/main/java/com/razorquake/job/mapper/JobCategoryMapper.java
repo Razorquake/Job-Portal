@@ -13,13 +13,15 @@ public class JobCategoryMapper {
                 .slug(slug)
                 .description(jobCategoryRequest.getDescription())
                 .iconUrl(jobCategoryRequest.getIconUrl())
+                .active(true)
                 .parent(parent)
                 .build();
     }
 
     public static JobCategoryResponse toJobCategoryResponse(JobCategory jobCategory, boolean includeChildren) {
 
-        List<JobCategoryResponse> children = includeChildren ? jobCategory.getSubCategories()
+        List<JobCategoryResponse> children = includeChildren && jobCategory.getSubCategories() != null ?
+                jobCategory.getSubCategories()
                 .stream()
                 .map(subcategory -> toJobCategoryResponse(subcategory, false))
                 .toList() : null;
@@ -34,6 +36,8 @@ public class JobCategoryMapper {
                 .parentId(jobCategory.getParent() != null ? jobCategory.getParent().getId() : null)
                 .parentName(jobCategory.getParent() != null ? jobCategory.getParent().getName() : null)
                 .children(children)
+                .createdAt(jobCategory.getCreatedAt())
+                .updatedAt(jobCategory.getUpdatedAt())
                 .build();
     }
 }

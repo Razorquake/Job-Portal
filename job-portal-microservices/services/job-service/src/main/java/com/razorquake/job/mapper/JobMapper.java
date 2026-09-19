@@ -1,15 +1,22 @@
 package com.razorquake.job.mapper;
 
+import com.razorquake.job.domain.JobStatus;
 import com.razorquake.job.dto.CompanyResponse;
 import com.razorquake.job.dto.JobRequest;
 import com.razorquake.job.dto.JobResponse;
 import com.razorquake.job.model.Job;
+import com.razorquake.job.model.JobCategory;
+import com.razorquake.job.model.JobSkill;
+import com.razorquake.job.model.JobTag;
 import com.razorquake.job.model.embeddable.JobLocation;
 import com.razorquake.job.model.embeddable.SalaryRange;
 
+import java.util.Set;
+import java.util.stream.Collectors;
+
 public class JobMapper {
 
-    public static Job toJob(JobRequest jobRequest, Long employerId) {
+    public static Job toJob(JobRequest jobRequest, Long employerId, JobCategory jobCategory, Set<JobSkill> jobSkillSet, Set<JobTag> jobTagSet) {
         Long companyId = 1L;
         return Job.builder()
                 .title(jobRequest.getTitle())
@@ -19,6 +26,9 @@ public class JobMapper {
                 .benefits(jobRequest.getBenefits())
                 .companyId(companyId)
                 .employerId(employerId)
+                .category(jobCategory)
+                .skills(jobSkillSet)
+                .tags(jobTagSet)
                 .location(
                         JobLocation.builder()
                                 .address(jobRequest.getAddress())
@@ -40,6 +50,8 @@ public class JobMapper {
                 .openings(jobRequest.getOpenings() == null ? 1 : jobRequest.getOpenings())
                 .applicationDeadline(jobRequest.getApplicationDeadline())
                 .expiresAt(jobRequest.getExpiresAt())
+                .active(true)
+                .status(JobStatus.DRAFT)
                 .build();
     }
 
@@ -55,6 +67,9 @@ public class JobMapper {
                 .responsibilities(job.getResponsibilities())
                 .benefits(job.getBenefits())
                 .employerId(job.getEmployerId())
+                .category(JobCategoryMapper.toJobCategoryResponse(job.getCategory(), false))
+                .skills(job.getSkills().stream().map(JobSkillMapper::toResponse).collect(Collectors.toSet()))
+                .tags(job.getTags().stream().map(JobTagMapper::mapToJobTagResponse).collect(Collectors.toSet()))
                 .company(companyResponse)
                 .address(job.getLocation().getAddress())
                 .city(job.getLocation().getCity())
@@ -75,6 +90,7 @@ public class JobMapper {
                 .updatedAt(job.getUpdatedAt())
                 .publishedAt(job.getPublishedAt())
                 .closedAt(job.getClosedAt())
+                .active(job.getActive())
                 .build();
     }
 
