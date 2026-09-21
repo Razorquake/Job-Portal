@@ -9,5 +9,5 @@ import java.util.List;
 @Repository
 public interface WorkExperienceRepository extends JpaRepository<WorkExperience, Long> {
 
-    List<WorkExperience> findByResumeIdOrderByDisplayOrderAsc(Long resumeId);
+    List<WorkExperience> findByResume_IdOrderByDisplayOrderAsc(Long resumeId);
 }

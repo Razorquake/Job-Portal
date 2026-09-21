@@ -38,7 +38,7 @@ public class WorkExperienceServiceImpl implements WorkExperienceService {
 
     @Override
     public List<WorkExperienceResponse> getWorkExperiencesByResumeId(Long resumeId) {
-        return workExperienceRepository.findByResumeIdOrderByDisplayOrderAsc(resumeId).stream()
+        return workExperienceRepository.findByResume_IdOrderByDisplayOrderAsc(resumeId).stream()
                 .map(WorkExperienceMapper::toWorkExperienceResponse)
                 .toList();
     }
