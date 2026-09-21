@@ -3,7 +3,6 @@ package com.razorquake.job.service.impl;
 import com.razorquake.job.dto.CreateResumeRequest;
 import com.razorquake.job.dto.PersonalInfoResponse;
 import com.razorquake.job.dto.ResumeResponse;
-import com.razorquake.job.exception.NotFoundException;
 import com.razorquake.job.exception.UnauthorizedException;
 import com.razorquake.job.mapper.ResumeMapper;
 import com.razorquake.job.model.PersonalInfo;
@@ -120,11 +119,19 @@ public class ResumeServiceImpl implements ResumeService {
     }
 
     @Override
-    public Resume getResumeEntity(Long resumeId) {
+    public Resume getResumeEntity(
+            Long resumeId,
+            Long candidateId
+            ) {
         return resumeRepository
-                .findById(resumeId)
+                .findByIdAndCandidateId(resumeId, candidateId)
                 .orElseThrow(
-                        () -> new NotFoundException("Resume not found with id: " + resumeId)
+                        () -> new UnauthorizedException(
+                                "Candidate with id: " +
+                                        candidateId +
+                                        " does not have access to resume with id: " +
+                                        resumeId
+                        )
                 );
     }
 }

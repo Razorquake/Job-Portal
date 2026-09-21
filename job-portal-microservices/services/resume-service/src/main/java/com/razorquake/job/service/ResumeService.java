@@ -45,5 +45,5 @@ public interface ResumeService {
             Long resumeId
     );
 
-    Resume getResumeEntity(Long resumeId);
+    Resume getResumeEntity(Long resumeId, Long candidateId);
 }
