@@ -3,6 +3,7 @@ package com.razorquake.job.service.impl;
 import com.razorquake.job.dto.ResumeSkillRequest;
 import com.razorquake.job.dto.ResumeSkillResponse;
 import com.razorquake.job.exception.NotFoundException;
+import com.razorquake.job.exception.UnauthorizedException;
 import com.razorquake.job.mapper.ResumeSkillMapper;
 import com.razorquake.job.model.Resume;
 import com.razorquake.job.model.ResumeSkill;
@@ -48,6 +49,13 @@ public class ResumeSkillServiceImpl implements ResumeSkillService {
 
         ResumeSkill resumeSkill = resumeSkillRepository.findById(resumeSkillId)
                 .orElseThrow(() -> new NotFoundException("ResumeSkill with id " + resumeSkillId + " not found"));
+        if (!resumeSkill.getResume().getId().equals(resumeId)) {
+            throw new UnauthorizedException(
+                    "Resume skill with id " + resumeSkillId +
+                            " does not belong to resume with id " + resumeId
+            );
+        }
+
         resumeService.getResumeEntity(resumeId, candidateId);
 
         resumeSkill.setDisplayOrder(
@@ -66,6 +74,12 @@ public class ResumeSkillServiceImpl implements ResumeSkillService {
     public void deleteResumeSkill(Long resumeId, Long candidateId, Long resumeSkillId) {
         ResumeSkill resumeSkill = resumeSkillRepository.findById(resumeSkillId)
                 .orElseThrow(() -> new NotFoundException("ResumeSkill with id " + resumeSkillId + " not found"));
+        if (!resumeSkill.getResume().getId().equals(resumeId)) {
+            throw new UnauthorizedException(
+                    "Resume skill with id " + resumeSkillId +
+                            " does not belong to resume with id " + resumeId
+            );
+        }
         resumeService.getResumeEntity(resumeId, candidateId);
         resumeSkillRepository.delete(resumeSkill);
     }

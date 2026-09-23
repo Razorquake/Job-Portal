@@ -4,6 +4,7 @@ import com.razorquake.job.dto.ApiResponse;
 import com.razorquake.job.dto.WorkExperienceRequest;
 import com.razorquake.job.dto.WorkExperienceResponse;
 import com.razorquake.job.service.WorkExperienceService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +23,7 @@ public class WorkExperienceController {
     public ResponseEntity<WorkExperienceResponse> createWorkExperience(
             @PathVariable Long resumeId,
             @RequestHeader("X-User-Id") Long candidateId,
-            @RequestBody WorkExperienceRequest request
+            @RequestBody @Valid WorkExperienceRequest request
     ) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -41,7 +42,7 @@ public class WorkExperienceController {
             @PathVariable Long resumeId,
             @RequestHeader("X-User-Id") Long candidateId,
             @PathVariable Long workExperienceId,
-            @RequestBody WorkExperienceRequest request
+            @RequestBody @Valid WorkExperienceRequest request
     ) {
         return ResponseEntity.ok(
                 workExperienceService.updateWorkExperience(
