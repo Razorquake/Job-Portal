@@ -1,9 +1,9 @@
 package com.razorquake.job.controller;
 
+import com.razorquake.job.dto.LanguageRequest;
+import com.razorquake.job.dto.LanguageResponse;
 import com.razorquake.job.dto.ApiResponse;
-import com.razorquake.job.dto.ResumeSkillRequest;
-import com.razorquake.job.dto.ResumeSkillResponse;
-import com.razorquake.job.service.ResumeSkillService;
+import com.razorquake.job.service.LanguageService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -13,69 +13,70 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/resumes/{resumeId}/skills")
+@RequestMapping("/api/resumes/{resumeId}/languages")
 @RequiredArgsConstructor
-public class ResumeSkillController {
+public class LanguageController {
 
-    private final ResumeSkillService resumeSkillService;
-
+    private final LanguageService languageService;
 
     @PostMapping
-    public ResponseEntity<ResumeSkillResponse> createResumeSkill(
+    public ResponseEntity<LanguageResponse> createLanguage(
             @PathVariable Long resumeId,
             @RequestHeader("X-User-Id") Long candidateId,
-            @RequestBody @Valid ResumeSkillRequest resumeSkillRequest
-
-            ) {
+            @RequestBody @Valid LanguageRequest request
+    ) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(
-                        resumeSkillService.addResumeSkill(
+                        languageService.createLanguage(
                                 resumeId,
                                 candidateId,
-                                resumeSkillRequest
+                                request
                         )
                 );
     }
 
-
     @GetMapping
-    public ResponseEntity<List<ResumeSkillResponse>> getResumeSkills(
+    public ResponseEntity<List<LanguageResponse>> getLanguages(
             @PathVariable Long resumeId
     ) {
         return ResponseEntity.ok(
-                resumeSkillService.getResumeSkillsByResumeId(resumeId)
+                languageService.getLanguagesByResumeId(resumeId)
         );
     }
 
-    @PutMapping("/{skillId}")
-    public ResponseEntity<ResumeSkillResponse> updateResumeSkill(
+    @PutMapping("/{languageId}")
+    public ResponseEntity<LanguageResponse> updateLanguage(
             @PathVariable Long resumeId,
             @RequestHeader("X-User-Id") Long candidateId,
-            @PathVariable Long skillId,
-            @RequestBody @Valid ResumeSkillRequest resumeSkillRequest
+            @PathVariable Long languageId,
+            @RequestBody @Valid LanguageRequest request
     ) {
         return ResponseEntity.ok(
-                resumeSkillService.updateResumeSkill(resumeId, candidateId, skillId, resumeSkillRequest)
+                languageService.updateLanguage(
+                        resumeId,
+                        candidateId,
+                        languageId,
+                        request
+                )
         );
     }
 
-    @DeleteMapping("/{skillId}")
-    public ResponseEntity<ApiResponse> deleteResumeSkill(
+    @DeleteMapping("/{languageId}")
+    public ResponseEntity<ApiResponse> deleteLanguage(
             @PathVariable Long resumeId,
             @RequestHeader("X-User-Id") Long candidateId,
-            @PathVariable Long skillId
+            @PathVariable Long languageId
     ) {
-        resumeSkillService.deleteResumeSkill(resumeId, candidateId, skillId);
+        languageService.deleteLanguage(resumeId, candidateId, languageId);
         return ResponseEntity
                 .status(HttpStatus.NO_CONTENT)
                 .body(
                         ApiResponse.builder()
-                                .message("Resume skill deleted successfully")
+                                .message("Language deleted successfully")
                                 .success(true)
                                 .build()
                 );
     }
-
 
 }

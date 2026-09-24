@@ -6,7 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 @Data
@@ -21,8 +21,8 @@ public class WorkExperienceResponse {
     private String jobTitle;
     private JobType employmentType;
     private String location;
-    private LocalDateTime startDate;
-    private LocalDateTime endDate;
+    private LocalDate startDate;
+    private LocalDate endDate;
     private Boolean isCurrentJob;
     private String description;
     private List<String> technologies;

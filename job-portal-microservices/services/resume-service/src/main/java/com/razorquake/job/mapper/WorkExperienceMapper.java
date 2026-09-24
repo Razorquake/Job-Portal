@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 public class WorkExperienceMapper {
 
-    public static WorkExperienceResponse toWorkExperienceResponse(WorkExperience workExperience) {
+    public static WorkExperienceResponse toResponse(WorkExperience workExperience) {
         return WorkExperienceResponse.builder()
                 .id(workExperience.getId())
                 .companyName(workExperience.getCompanyName())

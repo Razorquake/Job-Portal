@@ -14,7 +14,7 @@ import java.time.LocalDate;
 public class EducationRequest {
 
     @NotBlank(message = "Institution cannot be blank")
-    private String institution;
+    private String institutionName;
 
     @NotBlank(message = "Degree cannot be blank")
     private String degree;

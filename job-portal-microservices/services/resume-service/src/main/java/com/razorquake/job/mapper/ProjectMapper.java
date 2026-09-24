@@ -9,7 +9,7 @@ import java.util.List;
 
 public class ProjectMapper {
 
-    public static ProjectResponse toProjectResponse(Project project) {
+    public static ProjectResponse toResponse(Project project) {
         return ProjectResponse.builder()
                 .id(project.getId())
                 .title(project.getTitle())

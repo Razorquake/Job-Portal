@@ -22,10 +22,16 @@ public class ProjectRequest {
     private String description;
     private List<String> technologies;
 
-    @Pattern(regexp = "^(https?://).", message = "Invalid URL format")
+    @Pattern(
+            regexp = "^https?://\\S+$",
+            message = "Invalid URL format"
+    )
     private String projectUrl;
 
-    @Pattern(regexp = "^(https?://).", message = "Invalid URL format")
+    @Pattern(
+            regexp = "^https?://\\S+$",
+            message = "Invalid URL format"
+    )
     private String sourceCodeUrl;
 
     private LocalDate startDate;

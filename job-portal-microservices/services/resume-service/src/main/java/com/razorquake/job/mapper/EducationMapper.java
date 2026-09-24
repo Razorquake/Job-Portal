@@ -7,7 +7,7 @@ import com.razorquake.job.model.Resume;
 
 public class EducationMapper {
 
-    public static EducationResponse toEducationResponse(Education education) {
+    public static EducationResponse toResponse(Education education) {
         return EducationResponse.builder()
                 .id(education.getId())
                 .institution(education.getInstitutionName())
@@ -25,7 +25,7 @@ public class EducationMapper {
     public static Education toEntity(EducationRequest educationRequest, Resume resume) {
         return Education.builder()
                 .resume(resume)
-                .institutionName(educationRequest.getInstitution())
+                .institutionName(educationRequest.getInstitutionName())
                 .degree(educationRequest.getDegree())
                 .fieldOfStudy(educationRequest.getFieldOfStudy())
                 .grade(educationRequest.getGrade())

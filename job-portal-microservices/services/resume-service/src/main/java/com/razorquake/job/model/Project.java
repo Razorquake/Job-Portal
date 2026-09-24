@@ -32,7 +32,7 @@ public class Project {
 
     private String description;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     private List<String> technologies = new ArrayList<>();
 
     private String projectUrl;

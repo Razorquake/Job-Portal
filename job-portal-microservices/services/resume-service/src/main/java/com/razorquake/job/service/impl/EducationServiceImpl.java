@@ -26,7 +26,7 @@ public class EducationServiceImpl implements EducationService {
     public EducationResponse addEducation(Long resumeId, Long candidateId, EducationRequest educationRequest) {
         Resume resume = resumeService.getResumeEntity(resumeId, candidateId);
 
-        return EducationMapper.toEducationResponse(
+        return EducationMapper.toResponse(
                 educationRepository.save(
                         EducationMapper.toEntity(
                                 educationRequest,
@@ -41,7 +41,7 @@ public class EducationServiceImpl implements EducationService {
         return educationRepository
                 .findByResume_IdOrderByDisplayOrderAsc(resumeId)
                 .stream()
-                .map(EducationMapper::toEducationResponse)
+                .map(EducationMapper::toResponse)
                 .toList();
     }
 
@@ -61,7 +61,7 @@ public class EducationServiceImpl implements EducationService {
             );
         }
         resumeService.getResumeEntity(resumeId, candidateId);
-        education.setInstitutionName(educationRequest.getInstitution());
+        education.setInstitutionName(educationRequest.getInstitutionName());
         education.setDegree(educationRequest.getDegree());
         education.setFieldOfStudy(educationRequest.getFieldOfStudy());
         education.setGrade(educationRequest.getGrade());
@@ -76,7 +76,7 @@ public class EducationServiceImpl implements EducationService {
         );
 
 
-        return EducationMapper.toEducationResponse(educationRepository.save(education));
+        return EducationMapper.toResponse(educationRepository.save(education));
     }
 
     @Override

@@ -12,11 +12,13 @@ import com.razorquake.job.service.ProjectService;
 import com.razorquake.job.service.ResumeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class ProjectServiceImpl implements ProjectService {
 
     private final ProjectRepository projectRepository;
@@ -29,7 +31,7 @@ public class ProjectServiceImpl implements ProjectService {
             ProjectRequest projectRequest
     ) {
         Resume resume = resumeService.getResumeEntity(resumeId, candidateId);
-        return ProjectMapper.toProjectResponse(
+        return ProjectMapper.toResponse(
                 projectRepository.save(
                         ProjectMapper.toProject(projectRequest, resume)
                 )
@@ -40,7 +42,7 @@ public class ProjectServiceImpl implements ProjectService {
     public List<ProjectResponse> getProjectsByResumeId(Long resumeId) {
         return projectRepository.findByResume_IdOrderByDisplayOrderAsc(resumeId)
                 .stream()
-                .map(ProjectMapper::toProjectResponse)
+                .map(ProjectMapper::toResponse)
                 .toList();
     }
 
@@ -77,7 +79,7 @@ public class ProjectServiceImpl implements ProjectService {
                         projectRequest.getDisplayOrder() :
                         project.getDisplayOrder()
         );
-        return ProjectMapper.toProjectResponse(
+        return ProjectMapper.toResponse(
                 projectRepository.save(project)
         );
     }

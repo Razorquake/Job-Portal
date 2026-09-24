@@ -1,13 +1,11 @@
 package com.razorquake.job.service.impl;
 
-import com.razorquake.job.dto.CreateResumeRequest;
-import com.razorquake.job.dto.PersonalInfoResponse;
-import com.razorquake.job.dto.ResumeResponse;
+import com.razorquake.job.dto.*;
 import com.razorquake.job.exception.UnauthorizedException;
-import com.razorquake.job.mapper.ResumeMapper;
+import com.razorquake.job.mapper.*;
 import com.razorquake.job.model.PersonalInfo;
 import com.razorquake.job.model.Resume;
-import com.razorquake.job.repository.ResumeRepository;
+import com.razorquake.job.repository.*;
 import com.razorquake.job.service.ResumeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,6 +17,11 @@ import java.util.List;
 public class ResumeServiceImpl implements ResumeService {
 
     private final ResumeRepository resumeRepository;
+    private final WorkExperienceRepository workExperienceRepository;
+    private final EducationRepository educationRepository;
+    private final ResumeSkillRepository resumeSkillRepository;
+    private final ProjectRepository projectRepository;
+    private final LanguageRepository languageRepository;
 
     @Override
     public ResumeResponse createResume(Long candidateId, CreateResumeRequest request) {
@@ -29,7 +32,7 @@ public class ResumeServiceImpl implements ResumeService {
                         resumeRepository.save(existing);
                     });
         }
-        return ResumeMapper.toResponse(
+        return toResponse(
                 resumeRepository.save(
                         ResumeMapper.toEntity(candidateId, request)
                 )
@@ -41,13 +44,50 @@ public class ResumeServiceImpl implements ResumeService {
         Resume resume = resumeRepository
                 .findByIdAndCandidateId(resumeId, candidateId)
                 .orElseThrow(() -> new UnauthorizedException("Resume access denied"));
-        return ResumeMapper.toResponse(resume);
+        return toResponse(resume);
+    }
+
+    private ResumeResponse toResponse(Resume resume) {
+
+        List<WorkExperienceResponse> workExperienceResponses = workExperienceRepository
+                .findByResume_IdOrderByDisplayOrderAsc(resume.getId())
+                .stream().map(WorkExperienceMapper::toResponse)
+                .toList();
+
+        List<EducationResponse> educationResponses = educationRepository
+                .findByResume_IdOrderByDisplayOrderAsc(resume.getId())
+                .stream().map(EducationMapper::toResponse)
+                .toList();
+
+        List<ResumeSkillResponse> resumeSkillResponses = resumeSkillRepository
+                .findByResume_IdOrderByDisplayOrderAsc(resume.getId())
+                .stream().map(ResumeSkillMapper::toResponse)
+                .toList();
+
+        List<ProjectResponse> projectResponses = projectRepository
+                .findByResume_IdOrderByDisplayOrderAsc(resume.getId())
+                .stream().map(ProjectMapper::toResponse)
+                .toList();
+
+        List<LanguageResponse> languageResponses = languageRepository
+                .findByResume_IdOrderByDisplayOrderAsc(resume.getId())
+                .stream().map(LanguageMapper::toResponse)
+                .toList();
+
+        return ResumeMapper.toResponse(
+                resume,
+                workExperienceResponses,
+                educationResponses,
+                resumeSkillResponses,
+                projectResponses,
+                languageResponses
+        );
     }
 
     @Override
     public List<ResumeResponse> getResumes(Long candidateId) {
         return resumeRepository.findByCandidateIdAndIsActiveTrue(candidateId)
-                .stream().map(ResumeMapper::toResponse)
+                .stream().map(this::toResponse)
                 .toList();
     }
 
@@ -92,7 +132,7 @@ public class ResumeServiceImpl implements ResumeService {
 
         resume.setPersonalInfo(info);
 
-        return ResumeMapper.toResponse(
+        return toResponse(
                 resumeRepository.save(resume)
         );
     }
@@ -102,7 +142,7 @@ public class ResumeServiceImpl implements ResumeService {
         Resume resume = resumeRepository.findByIdAndCandidateId(resumeId, candidateId)
                 .orElseThrow(() -> new UnauthorizedException("Resume access denied"));
         resume.setSummary(summary);
-        return ResumeMapper.toResponse(resumeRepository.save(resume));
+        return toResponse(resumeRepository.save(resume));
     }
 
     @Override
@@ -115,7 +155,7 @@ public class ResumeServiceImpl implements ResumeService {
                     resumeRepository.save(existing);
                 });
         resume.setIsDefault(true);
-        return ResumeMapper.toResponse(resumeRepository.save(resume));
+        return toResponse(resumeRepository.save(resume));
     }
 
     @Override

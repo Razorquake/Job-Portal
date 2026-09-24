@@ -1,14 +1,18 @@
 package com.razorquake.job.mapper;
 
-import com.razorquake.job.dto.CreateResumeRequest;
-import com.razorquake.job.dto.PersonalInfoResponse;
-import com.razorquake.job.dto.ResumeResponse;
+import com.razorquake.job.dto.*;
 import com.razorquake.job.model.PersonalInfo;
 import com.razorquake.job.model.Resume;
+
+import java.util.List;
 
 public class ResumeMapper {
 
     public static PersonalInfoResponse toPersonalInfoResponse(PersonalInfo personalInfo) {
+
+        if (personalInfo == null)
+            return null;
+
         return PersonalInfoResponse.builder()
                 .firstName(personalInfo.getFirstName())
                 .lastName(personalInfo.getLastName())
@@ -34,7 +38,14 @@ public class ResumeMapper {
                 .build();
     }
 
-    public static ResumeResponse toResponse(Resume resume) {
+    public static ResumeResponse toResponse(
+            Resume resume,
+            List<WorkExperienceResponse> workExperiences,
+            List<EducationResponse> educations,
+            List<ResumeSkillResponse> skills,
+            List<ProjectResponse> projects,
+            List<LanguageResponse> languages
+    ) {
         return ResumeResponse.builder()
                 .id(resume.getId())
                 .title(resume.getTitle())
@@ -44,6 +55,11 @@ public class ResumeMapper {
                 .personalInfo(toPersonalInfoResponse(resume.getPersonalInfo()))
                 .summary(resume.getSummary())
                 .completionScore(resume.getCompletionScore())
+                .workExperiences(workExperiences)
+                .educations(educations)
+                .skills(skills)
+                .projects(projects)
+                .languages(languages)
                 .createdAt(resume.getCreatedAt())
                 .updatedAt(resume.getUpdatedAt())
                 .build();

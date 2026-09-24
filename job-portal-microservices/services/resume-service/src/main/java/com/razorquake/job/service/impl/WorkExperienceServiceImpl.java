@@ -12,11 +12,13 @@ import com.razorquake.job.service.ResumeService;
 import com.razorquake.job.service.WorkExperienceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class WorkExperienceServiceImpl implements WorkExperienceService {
 
     private final ResumeService resumeService;
@@ -25,7 +27,7 @@ public class WorkExperienceServiceImpl implements WorkExperienceService {
     @Override
     public WorkExperienceResponse addWorkExperience(Long resumeId, Long candidateId, WorkExperienceRequest request) {
         Resume resume = resumeService.getResumeEntity(resumeId, candidateId);
-        return WorkExperienceMapper.toWorkExperienceResponse(
+        return WorkExperienceMapper.toResponse(
                 workExperienceRepository.save(
                         WorkExperienceMapper.toWorkExperience(
                                 request,
@@ -39,7 +41,7 @@ public class WorkExperienceServiceImpl implements WorkExperienceService {
     @Override
     public List<WorkExperienceResponse> getWorkExperiencesByResumeId(Long resumeId) {
         return workExperienceRepository.findByResume_IdOrderByDisplayOrderAsc(resumeId).stream()
-                .map(WorkExperienceMapper::toWorkExperienceResponse)
+                .map(WorkExperienceMapper::toResponse)
                 .toList();
     }
 
@@ -75,7 +77,7 @@ public class WorkExperienceServiceImpl implements WorkExperienceService {
         workExperience.setDisplayOrder(
                 request.getDisplayOrder() != null ? request.getDisplayOrder() : workExperience.getDisplayOrder()
         );
-        return WorkExperienceMapper.toWorkExperienceResponse(
+        return WorkExperienceMapper.toResponse(
                 workExperienceRepository.save(workExperience)
         );
     }
